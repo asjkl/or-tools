@@ -24,9 +24,7 @@ using Google.OrTools.ConstraintSolver;
 public class VrpTimeWindows {
   // [START data_model]
   class DataModel {
-    // Constructor:
-    public DataModel() {
-      timeMatrix_ = new long[,] {
+    public long[,] TimeMatrix = {
           {0, 6, 9, 8, 7, 3, 6, 2, 3, 2, 6, 6, 4, 4, 5, 9, 7},
           {6, 0, 8, 3, 2, 6, 8, 4, 8, 8, 13, 7, 5, 8, 12, 10, 14},
           {9, 8, 0, 11, 10, 6, 3, 9, 5, 8, 4, 15, 14, 13, 9, 18, 9},
@@ -45,7 +43,7 @@ public class VrpTimeWindows {
           {9, 10, 18, 6, 8, 12, 15, 8, 13, 9, 13, 3, 4, 5, 9, 0, 9},
           {7, 14, 9, 16, 14, 8, 5, 10, 6, 5, 4, 10, 8, 6, 2, 9, 0},
       };
-      timeWindows_ = new long[,] {
+    public long[,] TimeWindows = {
           {0, 0},
           {10, 15},
           {10, 15},
@@ -64,14 +62,8 @@ public class VrpTimeWindows {
           {10, 15},
           {5, 10},
       };
-    }
-    public ref readonly long[,] GetTimeMatrix() { return ref timeMatrix_;}
-    public ref readonly long[,] GetTimeWindows() { return ref timeWindows_;}
-    public int GetVehicleNumber() { return 4;}
-    public int GetDepot() { return 0;}
-
-    private long[,] timeMatrix_;
-    private long[,] timeWindows_;
+    public int VehicleNumber = 4;
+    public int Depot = 0;
   };
   // [END data_model]
 
@@ -88,7 +80,7 @@ public class VrpTimeWindows {
     RoutingDimension timeDimension = routing.GetMutableDimension("Time");
     // Inspect solution.
     long totalTime = 0;
-    for (int i = 0; i < data.GetVehicleNumber(); ++i) {
+    for (int i = 0; i < data.VehicleNumber; ++i) {
       Console.WriteLine("Route for Vehicle {0}:", i);
       long routeTime = 0;
       var index = routing.Start(i);
@@ -126,9 +118,9 @@ public class VrpTimeWindows {
     // Create Routing Index Manager
     // [START index_manager]
     RoutingIndexManager manager = new RoutingIndexManager(
-        data.GetTimeMatrix().GetLength(0),
-        data.GetVehicleNumber(),
-        data.GetDepot());
+        data.TimeMatrix.GetLength(0),
+        data.VehicleNumber,
+        data.Depot);
     // [END index_manager]
 
     // Create Routing Model.
@@ -143,7 +135,7 @@ public class VrpTimeWindows {
         // Convert from routing variable Index to distance matrix NodeIndex.
         var fromNode = manager.IndexToNode(fromIndex);
         var toNode = manager.IndexToNode(toIndex);
-        return data.GetTimeMatrix()[fromNode, toNode]; }
+        return data.TimeMatrix[fromNode, toNode]; }
     );
     // [END transit_callback]
 
@@ -163,21 +155,21 @@ public class VrpTimeWindows {
     RoutingDimension timeDimension = routing.GetMutableDimension("Time");
     // Add time window constraints for each location except depot
     // and 'copy' the slack var in the solution object (aka Assignment) to print it
-    for (int i = 1; i < data.GetTimeWindows().GetLength(0); ++i) {
+    for (int i = 1; i < data.TimeWindows.GetLength(0); ++i) {
       long index = manager.NodeToIndex(i);
       timeDimension.CumulVar(index).SetRange(
-          data.GetTimeWindows()[i, 0],
-          data.GetTimeWindows()[i, 1]);
+          data.TimeWindows[i, 0],
+          data.TimeWindows[i, 1]);
       routing.AddToAssignment(timeDimension.SlackVar(index));
     }
     // Add time window constraints for each vehicle start node
     // and 'copy' the slack var in the solution object (aka Assignment) to print
     // it
-    for (int i = 0; i < data.GetVehicleNumber(); ++i) {
+    for (int i = 0; i < data.VehicleNumber; ++i) {
       long index = routing.Start(i);
       timeDimension.CumulVar(index).SetRange(
-          data.GetTimeWindows()[0, 0],
-          data.GetTimeWindows()[0, 1]);
+          data.TimeWindows[0, 0],
+          data.TimeWindows[0, 1]);
       routing.AddToAssignment(timeDimension.SlackVar(index));
     }
     // [END time_constraint]

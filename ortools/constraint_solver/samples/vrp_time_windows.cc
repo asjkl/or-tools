@@ -24,8 +24,7 @@
 namespace operations_research {
 // [START data_model]
 struct DataModel {
-  DataModel()
-      : time_matrix({
+  const std::vector<std::vector<int64>> time_matrix{
             {0, 6, 9, 8, 7, 3, 6, 2, 3, 2, 6, 6, 4, 4, 5, 9, 7},
             {6, 0, 8, 3, 2, 6, 8, 4, 8, 8, 13, 7, 5, 8, 12, 10, 14},
             {9, 8, 0, 11, 10, 6, 3, 9, 5, 8, 4, 15, 14, 13, 9, 18, 9},
@@ -43,8 +42,8 @@ struct DataModel {
             {5, 12, 9, 14, 12, 6, 6, 7, 3, 3, 4, 7, 6, 4, 0, 9, 2},
             {9, 10, 18, 6, 8, 12, 15, 8, 13, 9, 13, 3, 4, 5, 9, 0, 9},
             {7, 14, 9, 16, 14, 8, 5, 10, 6, 5, 4, 10, 8, 6, 2, 9, 0},
-        }),
-        time_windows({
+        };
+  const std::vector<std::pair<int64, int64>> time_windows{
             {0, 0},
             {10, 15},
             {10, 15},
@@ -62,13 +61,9 @@ struct DataModel {
             {5, 10},
             {10, 15},
             {5, 10},
-        }),
-        num_vehicles(4),
-        depot(0) {}
-  const std::vector<std::vector<int64>> time_matrix;
-  const std::vector<std::pair<int64, int64>> time_windows;
-  const int num_vehicles;
-  const RoutingIndexManager::NodeIndex depot;
+        };
+  const int num_vehicles = 4;
+  const RoutingIndexManager::NodeIndex depot {0};
 };  // namespace operations_research
 // [END data_model]
 

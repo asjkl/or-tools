@@ -34,8 +34,7 @@ public class VrpTimeWindows {
 
   // [START data_model]
   static class DataModel {
-    public DataModel() {
-      timeMatrix = new long[][] {
+    public final long[][] timeMatrix = {
           {0, 6, 9, 8, 7, 3, 6, 2, 3, 2, 6, 6, 4, 4, 5, 9, 7},
           {6, 0, 8, 3, 2, 6, 8, 4, 8, 8, 13, 7, 5, 8, 12, 10, 14},
           {9, 8, 0, 11, 10, 6, 3, 9, 5, 8, 4, 15, 14, 13, 9, 18, 9},
@@ -53,8 +52,8 @@ public class VrpTimeWindows {
           {5, 12, 9, 14, 12, 6, 6, 7, 3, 3, 4, 7, 6, 4, 0, 9, 2},
           {9, 10, 18, 6, 8, 12, 15, 8, 13, 9, 13, 3, 4, 5, 9, 0, 9},
           {7, 14, 9, 16, 14, 8, 5, 10, 6, 5, 4, 10, 8, 6, 2, 9, 0},
-      };
-      timeWindows = new long[][] {
+      } ;
+    public final long[][] timeWindows = {
           {0, 0},
           {10, 15},
           {10, 15},
@@ -73,13 +72,8 @@ public class VrpTimeWindows {
           {10, 15},
           {5, 10},
       };
-      vehicleNumber = 4;
-      depot = 0;
-    }
-    public final long[][] timeMatrix;
-    public final long[][] timeWindows;
-    public final int vehicleNumber;
-    public final int depot;
+    public final int vehicleNumber = 4;
+    public final int depot = 0;
   }
   // [END data_model]
 
